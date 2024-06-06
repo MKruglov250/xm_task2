@@ -13,7 +13,7 @@ public class ApiHelper {
     static Requests requests = new Requests();
 
     public static LinkedHashMap findPerson(int pagesCount, String personName){
-        LinkedHashMap singlePerson = new LinkedHashMap();
+        LinkedHashMap singlePerson;
         for (int i = 1; i <= pagesCount; i++){
             log.info("Get page: " + i);
             String name = personName;
@@ -49,5 +49,33 @@ public class ApiHelper {
 
     public static List<String> getStarshipsList(Response film){
         return film.then().extract().path("starships");
+    }
+
+    public static LinkedHashMap getOldestPerson(int pagesCount){
+        double maximumage = 0;
+        LinkedHashMap oldestPerson = new LinkedHashMap<>();
+        LinkedHashMap singlePerson;
+        for (int i = 1; i <= pagesCount; i++){
+            Response response = requests.getPeople(i, HttpStatus.SC_OK);
+            List<LinkedHashMap> people = response.then().extract().path("results");
+            for (int j = 0; j < people.size(); j++){
+                singlePerson = people.get(j);
+                double personAge = getPersonAge(singlePerson);
+                if (personAge > maximumage){
+                    oldestPerson = singlePerson;
+                    maximumage = personAge;
+                }
+            }
+        }
+        return oldestPerson;
+    }
+
+    private static double getPersonAge(LinkedHashMap singlePerson){
+        String birthYear = (String) singlePerson.get("birth_year");
+        if (birthYear.contains("BBY")){
+            double birthYearCleaned = Double.valueOf(birthYear.replaceAll("BBY",""));
+            return 0 + birthYearCleaned;
+        }
+        return 0;
     }
 }

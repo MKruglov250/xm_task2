@@ -9,10 +9,11 @@ import org.testng.annotations.Test;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+
 @Log4j2
 public class ApiTest extends BaseTest{
 
-    public List<String> films;
     public static LinkedHashMap singlePerson;
     public static Response film;
     public static String vaderStarshipEndpoint;
@@ -57,5 +58,25 @@ public class ApiTest extends BaseTest{
             }
         }
         Assert.assertTrue(starshipInList);
+    }
+
+    @Test(description = "Get Oldest Person", priority = 3)
+    public void checkOldestPerson(){
+        log.info("Finding olderst person to play in Star Wars");
+        Response response = requests.getPeople(HttpStatus.SC_OK);
+        int peopleCount = response.then().extract().path("count");
+        int pagesCount = (int) Math.ceil((double) peopleCount / 10);
+        LinkedHashMap oldestPerson = ApiHelper.getOldestPerson(pagesCount);
+        String oldestPersonaName = (String) (oldestPerson.get("name"));
+        Assert.assertEquals(oldestPersonaName, "Yoda");
+    }
+
+    @Test(description = "Contract Test", priority = 4)
+    public void checkPeopleJsonStructure(){
+        log.info("Checking Model for List People request");
+        Response response = requests.getPeople(8, HttpStatus.SC_OK);
+        log.info("Check response matches schema: People Users");
+        response.then().assertThat()
+                .body(matchesJsonSchemaInClasspath("listPeople.json"));
     }
 }

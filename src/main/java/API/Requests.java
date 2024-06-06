@@ -15,44 +15,14 @@ public class Requests extends BaseApi{
     public Response getPeople(int page, int statusCode){
         log.info("Performing GET People request");
         requestSpecification.queryParam("page",page);
-        return get("/people");
+        Response response = get("/people");
+        restoreSpecification();
+        return response;
     }
 
     public Response getPeople(int statusCode){
         log.info("Performing GET People request");
         return get("/people");
-    }
-
-    public Response getSinglePerson(int personId, int statusCode){
-        log.info("Performing GET Single Person request: personID = " + personId);
-        return get("/people/" + personId);
-    }
-
-    public Response getFilmsFromPerson(String request){
-        log.info("Performing GET Single Film request:" + request);
-        return get(request.replaceAll("https://swapi.dev/api",""));
-    }
-
-    public Response getStarships(int page, int statusCode){
-        log.info("Performing GET Starships request");
-        requestSpecification.queryParam("page",page);
-        return get("/users");
-    }
-
-    public Response getSingleStarship(int starshipId, int statusCode){
-        log.info("Performing GET Single Starship request: starshipId = " + starshipId);
-        return get("/starship/" + starshipId);
-    }
-
-    public Response getPlanets(int page, int statusCode){
-        log.info("Performing GET Planets request");
-        requestSpecification.queryParam("page",page);
-        return get("/users");
-    }
-
-    public Response getSinglePlanet(int planetId, int statusCode){
-        log.info("Performing GET Single Planet request: planetId = " + planetId);
-        return get("/planets/" + planetId);
     }
 
 }

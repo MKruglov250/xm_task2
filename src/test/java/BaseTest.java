@@ -8,7 +8,6 @@ import API.Requests;
 public class BaseTest {
 
     Gson gson;
-    ContentType contentType = ContentType.JSON;
     Requests requests = new Requests();
 
     @AfterMethod
