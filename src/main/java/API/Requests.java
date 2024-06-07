@@ -1,16 +1,12 @@
 package API;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+//import com.google.gson.Gson;
+//import com.google.gson.GsonBuilder;
 import io.restassured.response.Response;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class Requests extends BaseApi{
-
-    Gson gson = new GsonBuilder()
-            .excludeFieldsWithoutExposeAnnotation()
-            .create();
 
     public Response getPeople(int page, int statusCode){
         log.info("Performing GET People request");

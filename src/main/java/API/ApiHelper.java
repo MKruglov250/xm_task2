@@ -11,6 +11,7 @@ import java.util.List;
 public class ApiHelper {
 
     static Requests requests = new Requests();
+    public static int oldestRequestsCount = 0;
 
     public static LinkedHashMap findPerson(int pagesCount, String personName){
         LinkedHashMap singlePerson;
@@ -57,6 +58,7 @@ public class ApiHelper {
         LinkedHashMap singlePerson;
         for (int i = 1; i <= pagesCount; i++){
             Response response = requests.getPeople(i, HttpStatus.SC_OK);
+            oldestRequestsCount++;
             List<LinkedHashMap> people = response.then().extract().path("results");
             for (int j = 0; j < people.size(); j++){
                 singlePerson = people.get(j);
@@ -77,5 +79,9 @@ public class ApiHelper {
             return 0 + birthYearCleaned;
         }
         return 0;
+    }
+
+    public static int getOldestRequestsCount(){
+        return oldestRequestsCount;
     }
 }

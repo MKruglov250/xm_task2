@@ -69,6 +69,8 @@ public class ApiTest extends BaseTest{
         LinkedHashMap oldestPerson = ApiHelper.getOldestPerson(pagesCount);
         String oldestPersonaName = (String) (oldestPerson.get("name"));
         Assert.assertEquals(oldestPersonaName, "Yoda");
+        int oldestRequestsCount = ApiHelper.getOldestRequestsCount();
+        Assert.assertTrue(oldestRequestsCount < 10);
     }
 
     @Test(description = "Contract Test", priority = 4)
